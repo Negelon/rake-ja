@@ -16,7 +16,9 @@ with open(path.join(here, "README.md"), encoding="utf-8") as f:
         packages=find_packages(exclude=["contrib", "docs", "tests"]),
         install_requires=[
             "mecab-python3>=0.7",
-            "rake-nltk>=1.0.4"
+            "rake-nltk>=1.0.4",
+            "ginza>=5.1.0",
+            "ja_ginza>=5.1.0"
         ],
         dependency_links=[],
         python_requires='~=3.3',
