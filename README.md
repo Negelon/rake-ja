@@ -9,7 +9,7 @@ This module builds on [rake-nltk](https://github.com/csurfer/rake-nltk).
 ```sh
 $ git clone https://github.com/kanjirz50/rake-ja.git
 $ cd rake-ja
-$ python setup.py install
+$ python -m pip install .
 ```
 
 ## Quick start
@@ -19,9 +19,9 @@ $ python setup.py install
 >>> tok = GinzaTokenizer()
 >>> ja_rake = JapaneseRake()
 >>> # MeCab を使用する際は以下 : 
->>> from rake_ja import Tokenizer
->>> tok = Tokenizer()
->>> ja_rake.set_tokenizer(tok)
+>>> # from rake_ja import Tokenizer
+>>> # tok = Tokenizer()
+>>> # ja_rake.set_tokenizer(tok)
 >>> # Wikipediaの記事から引用
 >>> text = """「人工知能」という名前は1956年にダートマス会議でジョン・マッカーシーにより命名された。
 現在では、記号処理を用いた知能の記述を主体とする情報処理や研究でのアプローチという意味あいでも使われている。
