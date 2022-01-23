@@ -3,7 +3,7 @@ import string
 from itertools import chain, groupby
 from rake_nltk import Rake, Metric
 
-
+from .ginza_tokenizer import GinzaTokenizer
 class JapaneseRake(Rake):
     def __init__(
         self,
@@ -35,10 +35,17 @@ class JapaneseRake(Rake):
         self.degree = None
         self.rank_list = None
         self.ranked_phrases = None
+        
+        # MeCab, Ginza 選択用
+        self.tokenizer = GinzaTokenizer()
 
     def extract_keywords_from_text(self, text):
         sentences = [list(g) for k, g in groupby(text, lambda x: x.surface not in set(["!", "。"]))]
         self.extract_keywords_from_sentences(sentences)
+    
+    def set_tokenizer(self, tokenizer) :
+        self.tokenizer = tokenizer
+        
 
     def _generate_phrases(self, tokens_of_sentences):
         phrase_list = set()
@@ -51,7 +58,11 @@ class JapaneseRake(Rake):
         return tuple([token.surface for token in group])
 
     def _get_phrase_list_from_words(self, word_list):
-        groups = groupby(word_list, lambda x: self._is_ignore(x))
+        groups = None
+        if isinstance(self.tokenizer, GinzaTokenizer) :
+            groups = groupby(word_list, lambda x: self._is_ignore_for_ginza(x))
+        else :
+            groups = groupby(word_list, lambda x: self._is_ignore(x))
         phrases = [self._group_tokens_to_str(group[1]) for group in groups if group[0]]
         return list(
             filter(
@@ -69,3 +80,7 @@ class JapaneseRake(Rake):
         if token.pos == "動詞" and token.pos_s1 == "自立" and token.form == "連用形":
             return True
         return False
+    
+    def _is_ignore_for_ginza(self, token, pos=['NOUN', 'PROUN', 'ADJ']):
+        if token.pos in pos :
+            return True
